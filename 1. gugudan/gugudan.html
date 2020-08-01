@@ -11,13 +11,12 @@
 <body>
     <div id="root">
         <div>{{first}}곱하기 {{second}}는?</div>
-        <form>
-            <input type="number" v-model="value">
+        <form v-on:submit="onSubmitForm">
+            <input type="number" ref="answer" v-model="value">
             <button>입력</button>
-            <div>{{value}}</div>
         </form>
+        <div id="result">{{result}}</div>
     </div>
-    <div id="result"></div>
 </body>
 <script>
     const app = new Vue({
@@ -28,7 +27,23 @@
             value: '',
             result: '',
         },
-        methods: {},
+        methods: {
+            onSubmitForm(e) {
+                e.preventDefault(); // 폼 누르고 새로고침을 하지 않게 하기 위해
+                console.log(this.first, this.second, this.value)
+                if (this.first * this.second == this.value) {
+                    this.result = '정답';
+                    this.first = Math.ceil(Math.random() * 9);
+                    this.second = Math.ceil(Math.random() * 9);
+                    this.value = '';
+                    this.$refs.answer.focus();
+                } else {
+                    this.result = '땡';
+                    this.value = '';
+                    this.$refs.answer.focus(); // 인풋창 focus
+                }
+            },
+        },
     });
 </script>
 
